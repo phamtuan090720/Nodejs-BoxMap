@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Map box</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/map.css" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map">
+        <div id="messErr"></div>
+        <div class="glass" id='containe_form'>
+            {{#if isHaveRegion}}
+            <section class="sreach-region">
+                <form action="/">
+                    <div class="input-group mb-3">
+                        <input type="text" value="{{region}}" name="region" class="form-control"
+                            placeholder="enter the region" aria-label="enter the region"
+                            aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn" type="submit" id="button-addon2"><img src="/img/search_icon.png"
+                                    alt="search_icon"></button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            {{else}}
+            <section class="sreach-region">
+                <form action="/">
+                    <div class="input-group mb-3">
+                        <input type="text" name="region" class="form-control" placeholder="enter the region"
+                            aria-label="enter the region" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn" type="submit" id="button-addon2"><img src="/img/search_icon.png"
+                                    alt="search_icon"></button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            {{/if}}
+            <section class="locations">
+                {{#if isHaveRegion}}
+                {{#if isHaveItem}}
+                <p class="title">list location : ({{count}})</p>
+                <div class="container_item">
+                    {{#each list_location}}
+                    <div class="card">
+                        <p>{{this.place_name}}</p>
+                        <p>coordinates : <span>{{this.lnt}},{{this.lt}}</span></p>
+                        <a class="text-primary" href="/?region={{this.region}}&lng={{this.lnt}}&lt={{this.lt}}">view in
+                            map</a>
+                    </div>
+                    {{/each}}
+                </div>
+                {{else}}
+                <p class="title text-danger">not found!</p>
+                {{/if}}
+                {{/if}}
+            </section>
+
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search)
+        const entries = params.entries(); //returns an iterator of decoded [key,value] tuples
+        function paramsToObject(entries) {
+            const result = {}
+            for (const [key, value] of entries) { // each 'entry' is a [key, value] tupple
+                result[key] = value;
+            }
+            return result;
+        }
+        const result = paramsToObject(entries)
+        var lng;
+        var lt;
+        // check xem có tọa độ trong search param hay không nếu không có thì sẽ lấy tọa độ của HCM gắn vào
+        if ("lng" in result && "lt" in result) {
+            lng = parseFloat(result.lng)
+            lt = parseFloat(result.lt)
+        }
+        else {
+            lng = 106.63333;
+            lt = 10.81667;
+        }
+        try {
+            mapboxgl.accessToken = 'pk.eyJ1IjoicGhhbXR1YW4wOTA3IiwiYSI6ImNrdzFpdDRtODAzenYyd3BkbDg1N3l2Y3QifQ.Ip2TU1DWhGY0tRxiaR4jww';
+            const map = new mapboxgl.Map({
+                container: 'map', // container ID
+                style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                center: [lng,
+                    lt], // starting position [lng, lat]
+                zoom: 9 // starting zoom
+            });
+            // Create a default Marker and add it to the map.
+            const marker1 = new mapboxgl.Marker()
+                .setLngLat([lng, lt])
+                .addTo(map);
+        }
+        catch (error) {
+            document.getElementById("messErr").innerHTML = "Lỗi rồi vui lòng truyền giá trị tọa độ hợp lệ";
+            document.getElementById("containe_form").style.display = "none"
+        }
+
+    </script>
+
+</body>
+
+</html>

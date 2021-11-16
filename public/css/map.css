@@ -1,0 +1,65 @@
+p {
+    margin: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.form-sreach {
+    z-index: 10;
+    background-color: white;
+    min-height: 50px;
+    width: 400px;
+}
+.glass {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    min-height: 50vh;
+    max-height: 60vh;
+    overflow: hidden;
+    background-color: white;
+    max-width: 500px;
+    width: 400px;
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+    border-radius: 2rem;
+    padding: 20px;
+}
+.card {
+    background-color: white;
+    background: linear-gradient(to left top, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+    border-radius: 2rem;
+    padding: 15px;
+    margin-bottom: 5px;
+}
+.card a {
+    text-decoration: none;
+}
+.card a:hover {
+    opacity: 0.7;
+}
+.card p:first-child {
+    font-weight: bold;
+}
+.card p:nth-child(2) {
+    font-weight: bold;
+}
+.card p:nth-child(2) span {
+    font-weight: normal;
+}
+#button-addon2:hover {
+    border: 1px solid #007bff;
+}
+#button-addon2 img {
+    width: 20px;
+    height: 20px;
+}
+.title {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.container_item {
+    max-height: 35vh;
+    overflow-y: scroll;
+    padding-left: 5px;
+    padding-right: 5px;
+}
